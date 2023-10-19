@@ -1,0 +1,178 @@
+body {
+    margin-bottom: 100px;
+    /* width: 100%; */
+    background-color: rgba(0, 0, 0, 0);
+}
+
+table{
+    margin: auto;
+    margin-top: 0px;
+    letter-spacing: .2em;
+}
+
+h1 {
+    text-align: center;
+    font-size: 5em;
+    /* margin: 50px 0px 25px; */
+}
+
+h2{
+    font-size: 3em;
+    text-align: center;
+    text-decoration: underline;
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0 0 0;
+}
+
+label {
+    font-size: 2.5em;
+    margin: 20px;
+    font-weight: 500;
+}
+
+input {
+    height: 100%;
+    font-size: 2em;
+    max-width: 150px;
+    padding: 5px;
+    margin: 20px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+th:nth-child(1){
+    font-size: 1em;
+    text-align: left;
+    padding: 5px;
+}
+
+th:nth-child(2){
+    font-size: 1em;
+    text-align: right;
+    padding: 5px;
+}
+
+td{
+    text-align: center;
+    padding: 5px;
+    margin: 5px;
+}
+
+#payout-nums th {
+    padding-left: 1em;
+    padding-right: 1em;
+    font-size: 1.25em;
+}
+
+#payout-nums td {
+    font-size: 1.25em;
+}
+
+h3{
+    text-align: center;
+    font-size: 2em !important;
+    margin: .25em;
+    letter-spacing: .2em;
+}
+h4{
+    text-align: center;
+    font-size: 2.5em;
+    color: green;
+    /* color: #ff0000; */
+    margin: .25em;
+    letter-spacing: .2em;
+}
+
+
+.negative{
+    text-align: center;
+    font-size: 2em;
+    color: red;
+    margin: .25em;
+    letter-spacing: .2em;
+}
+
+tbody td:nth-child(1){
+    text-align: left;
+    padding-right: 15px;
+}
+
+tbody td:nth-child(2){
+    text-align: right;
+    padding-left: 15px;
+}
+
+
+tr {
+    font-size: 1.5em;
+}
+
+h3 {
+    font-size: 2.5em !important;
+}
+
+.row-container {
+    display:flex;
+    justify-content: center;
+}
+
+#row {
+    width: 70%;
+    display: flex;
+    margin: 20px 80px 80px 80px;
+    justify-content: center;
+}
+
+.leaderboard {
+    width: 30%;
+    min-width: 400px;
+    max-width: 500px;
+    background-color: rgba(128, 128, 128, 0.69);
+    margin: 1%;
+    padding-bottom: 1.5%;
+    border-radius: 15px;
+}
+.payout-info {
+    padding-top: 1.5%;
+    width: 63%;
+    min-width: 1250px;
+    text-align: center;
+    margin: auto;
+    margin-top: 0px;
+    letter-spacing: .2em;
+    background-color: rgba(128, 128, 128, 0.69);
+    margin: 1%;
+    padding-bottom: 1.5%;
+    border-radius: 15px;
+}
+
+.payout-info-container {
+    display:flex;
+    justify-content: center;
+}
+
+h5 {
+    text-align: center;
+}
+
+.leaderboard-heading {
+    text-align: center;
+    font-size: 1.75em;
+    font-weight: 700;
+}
+
+.leaderboard-table {
+    width: 90%;
+
+}
+
+@media screen and (min-width: 500px) {
+    button {
+        display: none
+    };
+}
