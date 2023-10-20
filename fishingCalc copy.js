@@ -124,6 +124,10 @@ function roundToNearestFive(num){
     num = num - num%5
     return num
 }
+function roundToNearestOne(num){
+    num = num - num%1
+    return num
+}
 
 function calcNewPayout(num, entryFee) {
 
@@ -134,6 +138,8 @@ function calcNewPayout(num, entryFee) {
         
         // clear previous payout model
         payouts['topScores'] = []
+        payouts['topRandoms'] = []
+        payouts['completeRandoms'] = []
         // for (let p of Object.keys(payouts)) {
         //     payouts[p] = 0
         // }
@@ -153,185 +159,122 @@ function calcNewPayout(num, entryFee) {
     //     }
 
        
-        const topTenPayouts = [
-            '1st',
-            '2nd',
-            '3rd',
-            '4th',
-            '5th',
-            '6th',
-            '7th',
-            '8th',
-            '9th',
-            '10th'
-        ]
+        // const topTenPayouts = [
+        //     '1st',
+        //     '2nd',
+        //     '3rd',
+        //     '4th',
+        //     '5th',
+        //     '6th',
+        //     '7th',
+        //     '8th',
+        //     '9th',
+        //     '10th'
+        // ]
 
-        const outsideTopTenPayouts = [
-            '11th-15th',
-            '16th-20th',
-            '21st-25th',
-            '26th-30th',
-            '31st-35th',
-            '36th-40th',
-            '41st-45th',
-            '46th-50th',
-            '51st-55th',
-            '56th-60th',
-            '61st-65th',
-            '66th-70th',
-            '71st-75th'
-        ]
+        // const outsideTopTenPayouts = [
+        //     '11th-15th',
+        //     '16th-20th',
+        //     '21st-25th',
+        //     '26th-30th',
+        //     '31st-35th',
+        //     '36th-40th',
+        //     '41st-45th',
+        //     '46th-50th',
+        //     '51st-55th',
+        //     '56th-60th',
+        //     '61st-65th',
+        //     '66th-70th',
+        //     '71st-75th'
+        // ]
         
-        const specialHarvestPayouts = [
-            '10PT Drawing',
-            '9PT Drawing',
-            '8PT Drawing',
-            '7PT Drawing',
-            '100th',
-            '200th',
-            '300th',
-            '400th',
-            '500th',
-            '750th',
-            '1000th',
-            '1250th',
-        ]
+        // const specialHarvestPayouts = [
+        //     '10PT Drawing',
+        //     '9PT Drawing',
+        //     '8PT Drawing',
+        //     '7PT Drawing',
+        //     '100th',
+        //     '200th',
+        //     '300th',
+        //     '400th',
+        //     '500th',
+        //     '750th',
+        //     '1000th',
+        //     '1250th',
+        // ]
 
         // Calculating the TOP PLACE PAYOUTS
-        let topPlaces = Math.floor(num / 20)
-        let topPlacesPurse =  num *.75 * 25 * .45
+        let topPlaces = Math.max(Math.ceil(num / 10),3)
+        let topPlacesPurse =  num *.75 * 25 * .5
+        console.log("topPlacesPurse === ",topPlacesPurse)
 
-        if(num <= 100)
+        // if(num <= 100)
             for (let i = 0; i < topPlaces; i++) {
+                // console.log("1 topScores===",payouts['topScores'])
+                // console.log("i ===", i)
                     if (i === 0) {
-                        payouts['topScores'].push(roundToNearestFive(topPlacesPurse * .3))
+                        payouts['topScores'].push(Math.max(roundToNearestFive(topPlacesPurse * .30), entryFee * 6))
                     } else {
+                       
                         let remainingPurse = topPlacesPurse - payouts['topScores'].reduce((a,b)=>a+b)
+                        console.log("remainingPurseBefore=====",remainingPurse)
                         
-                        payouts['topScores'].push(roundToNearestFive(remainingPurse * .2))
+                        if (i <= 10) {
+                            payouts['topScores'].push(Math.max(roundToNearestFive(remainingPurse * .3), entryFee * 2))
+                        } 
+                        else if (i <= 20) {
+                            payouts['topScores'].push(Math.max(roundToNearestFive(remainingPurse * .3), entryFee * 3))
+                        }
+                        else if (i <= 40) {
+                            payouts['topScores'].push(Math.max(roundToNearestFive(remainingPurse * .3), entryFee * 2))
+                        } 
+                        else if (i <= 60) {
+                            payouts['topScores'].push(Math.max(roundToNearestFive(remainingPurse * .3), entryFee * 1.5))
+                        } 
+                        else if (i <= 80) {
+                            payouts['topScores'].push(Math.max(roundToNearestFive(remainingPurse * .3), entryFee * 1.25))
+                        } 
+                        else {
+                            payouts['topScores'].push(Math.max(roundToNearestFive(remainingPurse * .3), entryFee * 2))
+                        }
+                        remainingPurse = topPlacesPurse - payouts['topScores'].reduce((a,b)=>a+b)
+                        console.log("remainingPurseAfter=====",remainingPurse)
                     }
             }
-        if(num > 100)
-            for (let i = 0; i < topPlaces; i++) {
-                    if (i === 0) {
-                        payouts['topScores'].push(roundToNearestFive(topPlacesPurse * .3))
-                    } else {
-                        let remainingPurse = topPlacesPurse - payouts['topScores'].reduce((a,b)=>a+b)
-                        payouts['topScores'].push(Math.max(roundToNearestFive(remainingPurse * .2), entryFee * 2))
-                    }
-            }
-            console.log("Top Scores ===", payouts['topScores'])
+        // if(num > 100)
+        //     for (let i = 0; i < topPlaces; i++) {
+        //             if (i === 0) {
+        //                 payouts['topScores'].push(Math.max(roundToNearestFive(topPlacesPurse * .20)), entryFee * 6)
+        //             } else {
+        //                 let remainingPurse = topPlacesPurse - payouts['topScores'].reduce((a,b)=>a+b)
+        //                 payouts['topScores'].push(Math.max(roundToNearestFive(remainingPurse * .2), entryFee * 3))
+        //             }
+        //     }
+           
         // Minimum Payouts is 3
-        if (topPlaces < 3) topPlaces = 3
-        if (topPlaces > 10) topPlaces = 10
+        // if (topPlaces < 3) topPlaces = 3
+        // if (topPlaces > 10) topPlaces = 10
 
-        // Top Places templates based on payouts and assign payouts accordingly
-        
-        
-            if (topPlaces === 10 && num >= 500) {
-                payouts["1st"] = Math.max(roundTwoFidy(num * 6), entryFee * 3)
-                payouts["2nd"] = Math.max(roundTwoFidy(num * 5), entryFee * 3)
-                payouts["3rd"] = Math.max(roundTwoFidy(num * 4), entryFee * 3)
-                payouts["4th"] = Math.max(roundTwoFidy(num * 3.5), entryFee * 3)
-                payouts["5th"] = Math.max(roundTwoFidy(num * 2), entryFee * 3)
-                payouts["6th"] = Math.max(roundToNearestHundred(num * 1.6), entryFee * 3)
-                payouts["7th"] = Math.max(roundToNearestHundred(num * 1.6 - (entryFee *1)), entryFee * 3)
-                payouts["8th"] = Math.max(roundToNearestHundred(num * 1.6 - (entryFee *2)), entryFee * 3)
-                payouts["9th"] = Math.max(roundToNearestHundred(num * 1.6 - (entryFee *3)), entryFee * 3)
-                payouts["10th"] = Math.max(roundToNearestHundred(num * 1.6 - (entryFee *4)), entryFee * 3)
-            } 
-            else if ( num < 500 ) {
-                payouts["1st"] = Math.max(num * 2.5, entryFee*5)
-                payouts["2nd"] = Math.max(num * 2, entryFee*5)
-                payouts["3rd"] = Math.max(num * 1.5, entryFee * 4)
-                payouts["4th"] = Math.max(num * 1.25, entryFee * 4)
-                payouts["5th"] = Math.max(num * 1, entryFee * 3.5)
-                payouts["6th"] = Math.max(num * 1 - (entryFee *1), entryFee * 3.5)
-                payouts["7th"] = Math.max(num * 1 - (entryFee *2), entryFee * 3.25)
-                payouts["8th"] = Math.max(num * 1 - (entryFee *3), entryFee * 3.25)
-                payouts["9th"] = Math.max(num * 1 - (entryFee *4), entryFee * 3)
-                payouts["10th"] = Math.max(num * 1 - (entryFee *5), entryFee * 3)
-
-                if (topPlaces < 10) {
-                    const nonPaidNumber = 10 - topPlaces
-                    const changePayoutsToZeroArr = topTenPayouts.slice(-nonPaidNumber)
-                    for (let p of changePayoutsToZeroArr) {
-                        payouts[p] = 0
-                    }
-                }
-            } else {
-                  // if less than 100 entries keep the template above for the base payouts but 
-                // only pay 1 place per 10 entries (minimum of 3) and mark the non paid places to 0 in the payouts object
-                if (topPlaces < 10) {
-                    const nonPaidNumber = 10 - topPlaces
-                    const changePayoutsToZeroArr = topTenPayouts.slice(-nonPaidNumber)
-                    for (let p of changePayoutsToZeroArr) {
-                        payouts[p] = 0
-                    }
-                }
-
-            }
-        // use this number to define the number of Payouts outside the top ten starting at 100 entries adding adiitional places for every 200 entries
-        let outsideTopTen
-        if (num > 99) outsideTopTen = Math.ceil(num / 20)
-        // If Payout Model is 100 or Greater evaluate outside Top Ten Payouts
-        // if (num > 99){
-            // if (num < 200) outsideTopTen = outsideTopTen - 1
-            for (let i = 0; i < outsideTopTen; i++) {
-                     // for every set of places other than 11th-15th remove $125 from the product of num(entries)* .6 with the minumum value at $250
-                payouts[outsideTopTenPayouts[i]] = Math.max(num * 1, entryFee * 3)
+        let topRandomsPurse = num *.75 * 25 * .225
+        let topRandoms
+        topRandoms = Math.ceil(num / 20)
+            for (let i = 0; i < topRandoms; i++) {
+                const payout = roundToNearestFive(Math.max(topRandomsPurse / topRandoms, entryFee * 2))
+                console.log(payout, 100)
+                payouts['topRandoms'].push(Math.min(payout, 100))
                
             }
-            // Deep payouts go over 180th and add money to the payout numbers and Im too lazy to fix it
-            payouts.undefined? delete payouts.undefined : undefined
-        // } else {
 
-        // }
-        
-        // Special Harvest Payouts
-       
-            payouts["10PT Drawing"] = Math.max(num * 1, entryFee * 3)
-            payouts["9PT Drawing"] = Math.max(num * 1, entryFee * 3)
-            payouts["8PT Drawing"] = Math.max(num * 1, entryFee * 3)
-            payouts["7PT Drawing"] = Math.max(num * 1, entryFee * 3)
-    
-
-        // if (num >= 300) {
-        //     payouts["100th"] = roundToNearestFiddy(Math.min(num * 2, 3000))
-        // }
-        // if (num >= 500) {
-        //     payouts["200th"] = roundToNearestFiddy(Math.min(num * 2, 3000))
-        // }
-        // if (num >= 800) {
-        //     payouts["300th"] = roundToNearestFiddy(Math.min(num * .6, 1500))
-        // }
-        // if (num >= 1000) {
-        //     payouts["400th"] = roundToNearestFiddy(Math.min(num * .6, 1500))
-        // }
-        // if (num >= 1200) {
-        //     payouts["500th"] = roundToNearestFiddy(Math.min(num * .6, 1500))
-        // }
-        // if (num >= 1750) {
-        //     payouts["750th"] = roundToNearestFiddy(Math.min(num * .6, 1500))
-        // }
-        // // if (num >= 1250) {
-        // //     payouts["750th"] = Math.min(num * .5, 1500)
-        // // }
-        // if (num >= 2000) {
-        //     payouts["1000th"] = roundToNearestFiddy(Math.min(num * .6, 1500))
-        // }
-        // if (num >= 2500) {
-        //     payouts["1250th"] = roundToNearestFiddy(Math.min(num * .6, 1500))
-        // }
-
-        // Sum up all payouts in the 'payouts' object and calculate other payout info
-        // loop through all the outside top ten payouts and multiply by 4 (5places paid for each value) in order to get the proper payout total below
-        let outsidePayoutsAdd = 0
-        for (let p of outsideTopTenPayouts) {
-            outsidePayoutsAdd += payouts[p] * 4
-        }
-        console.log('outsidePayoutsAdd===',outsidePayoutsAdd)
-        payouts['hunterPayout'] = Object.values(payouts).reduce((a,b) => a+b) + outsidePayoutsAdd
+        let completeRandomsPurse = num *.75 * 25 * .225
+        let completeRandoms
+        completeRandoms = Math.ceil(num / 20)
+            for (let i = 0; i < completeRandoms; i++) {
+                    
+                payouts['completeRandoms'].push(roundToNearestFive(Math.max(completeRandomsPurse / completeRandoms, entryFee * 2)))
+               
+            }
+      
+        payouts['hunterPayout'] = payouts['topScores'].reduce((a,b) => a+b) + payouts['topRandoms'].reduce((a,b) => a+b) + payouts['completeRandoms'].reduce((a,b) => a+b)
         payouts['grossRevenue'] = hEntries * entryFee
         payouts['grossMargin'] = payouts['grossRevenue'] - payouts['hunterPayout']
         payouts['marginPercent'] = Math.round(payouts['grossMargin'] / payouts['grossRevenue'] * 100)
@@ -339,44 +282,88 @@ function calcNewPayout(num, entryFee) {
         console.log(payouts)
 
         // Now manipulating html for front end display for the default 500 entry model
-        firstPlacePayout.innerText = `$${payouts['1st']}`
-        secondPlacePayout.innerText = `$${payouts['2nd']}`
-        thirdPlacePayout.innerText = `$${payouts['3rd']}`
-        fourthPlacePayout.innerText = `$${payouts['4th']}`
-        fifthPlacePayout.innerText = `$${payouts['5th']}`
-        sixthPlacePayout.innerText = `$${payouts['6th']}`
-        seventhPlacePayout.innerText = `$${payouts['7th']}`
-        eighthPlacePayout.innerText = `$${payouts['8th']}`
-        ninthPlacePayout.innerText = `$${payouts['9th']}`
-        tenthPlacePayout.innerText = `$${payouts['10th']}`
+        for (let [i, payout] of payouts['topScores'].entries()) {
+            newTr = document.createElement('tr');
+            newTr.id = 'new-payout'
+            newPlaceTd = document.createElement('td');
+            newPlaceTd.innerText = `${i+1}`;
+            newTr.append(newPlaceTd);
+
+            newPayoutTd = document.createElement('td');
+            newPayoutTd.innerText = `$${payout}`;
+            newTr.append(newPayoutTd);
+
+            document.querySelector('#top-ten tbody').append(newTr);
+
+        }
+        for (let [i, payout] of payouts['topRandoms'].entries()) {
+            newTr = document.createElement('tr');
+            newTr.id = 'new-payout'
+            newPlaceTd = document.createElement('td');
+            newPlaceTd.innerText = `${i+1}`;
+            newTr.append(newPlaceTd);
+
+            newPayoutTd = document.createElement('td');
+            newPayoutTd.innerText = `$${payout}`;
+            newTr.append(newPayoutTd);
+
+            document.querySelector('#outside-top-ten tbody').append(newTr);
+
+        }
+
+        for (let [i, payout] of payouts['completeRandoms'].entries()) {
+            newTr = document.createElement('tr');
+            newTr.id = 'new-payout'
+            newPlaceTd = document.createElement('td');
+            newPlaceTd.innerText = `${i+1}`;
+            newTr.append(newPlaceTd);
+
+            newPayoutTd = document.createElement('td');
+            newPayoutTd.innerText = `$${payout}`;
+            newTr.append(newPayoutTd);
+
+            document.querySelector('#special-harvest tbody').append(newTr);
+
+        }
+           
+        // firstPlacePayout.innerText = `$${payouts['1st']}`
+        // secondPlacePayout.innerText = `$${payouts['2nd']}`
+        // thirdPlacePayout.innerText = `$${payouts['3rd']}`
+        // fourthPlacePayout.innerText = `$${payouts['4th']}`
+        // fifthPlacePayout.innerText = `$${payouts['5th']}`
+        // sixthPlacePayout.innerText = `$${payouts['6th']}`
+        // seventhPlacePayout.innerText = `$${payouts['7th']}`
+        // eighthPlacePayout.innerText = `$${payouts['8th']}`
+        // ninthPlacePayout.innerText = `$${payouts['9th']}`
+        // tenthPlacePayout.innerText = `$${payouts['10th']}`
   
-        firstFivePayout.innerText = `$${payouts['11th-15th']}`                               
-        secondFivePayout.innerText = `$${payouts['16th-20th']}`
-        thirdFivePayout.innerText = `$${payouts['21st-25th']}`
-        fourthFivePayout.innerText = `$${payouts['26th-30th']}`
-        fifthFivePayout.innerText = `$${payouts['31st-35th']}`
-        sixthFivePayout.innerText = `$${payouts['36th-40th']}`
-        seventhFivePayout.innerText = `$${payouts['41st-45th']}`
-        eighthFivePayout.innerText = `$${payouts['46th-50th']}`
-        ninthFivePayout.innerText = `$${payouts['51st-55th']}`
-        tenthFivePayout.innerText = `$${payouts['56th-60th']}`
-        eleventhFivePayout.innerText = `$${payouts['61st-65th']}`
-        twelvethFivePayout.innerText = `$${payouts['66th-70th']}`
-        lastFivePayout.innerText = `$${payouts['71st-75th']}`
+        // firstFivePayout.innerText = `$${payouts['11th-15th']}`                               
+        // secondFivePayout.innerText = `$${payouts['16th-20th']}`
+        // thirdFivePayout.innerText = `$${payouts['21st-25th']}`
+        // fourthFivePayout.innerText = `$${payouts['26th-30th']}`
+        // fifthFivePayout.innerText = `$${payouts['31st-35th']}`
+        // sixthFivePayout.innerText = `$${payouts['36th-40th']}`
+        // seventhFivePayout.innerText = `$${payouts['41st-45th']}`
+        // eighthFivePayout.innerText = `$${payouts['46th-50th']}`
+        // ninthFivePayout.innerText = `$${payouts['51st-55th']}`
+        // tenthFivePayout.innerText = `$${payouts['56th-60th']}`
+        // eleventhFivePayout.innerText = `$${payouts['61st-65th']}`
+        // twelvethFivePayout.innerText = `$${payouts['66th-70th']}`
+        // lastFivePayout.innerText = `$${payouts['71st-75th']}`
 
         // Apply special harvest payouts to the DOM
-        tenPointPayout.innerText = `$${payouts['10PT Drawing']}`
-        ninePointPayout.innerText = `$${payouts['9PT Drawing']}`
-        eightPointPayout.innerText = `$${payouts['8PT Drawing']}`
-        sevenPointPayout.innerText = `$${payouts['7PT Drawing']}`
-        hundredthPayout.innerText = `$${payouts['100th']}`
-        twoHundredthPayout.innerText = `$${payouts['200th']}`
-        threeHundredthPayout.innerText = `$${payouts['300th']}`
-        fourHundredthPayout.innerText = `$${payouts['400th']}`
-        fiveHundredthPayout.innerText = `$${payouts['500th']}`
-        sevenFidyPayout.innerText = `$${payouts['750th']}`
-        thousandthPayout.innerText = `$${payouts['1000th']}`
-        twelvehunnaFidyPayout.innerText = `$${payouts['1250th']}`
+        // tenPointPayout.innerText = `$${payouts['10PT Drawing']}`
+        // ninePointPayout.innerText = `$${payouts['9PT Drawing']}`
+        // eightPointPayout.innerText = `$${payouts['8PT Drawing']}`
+        // sevenPointPayout.innerText = `$${payouts['7PT Drawing']}`
+        // hundredthPayout.innerText = `$${payouts['100th']}`
+        // twoHundredthPayout.innerText = `$${payouts['200th']}`
+        // threeHundredthPayout.innerText = `$${payouts['300th']}`
+        // fourHundredthPayout.innerText = `$${payouts['400th']}`
+        // fiveHundredthPayout.innerText = `$${payouts['500th']}`
+        // sevenFidyPayout.innerText = `$${payouts['750th']}`
+        // thousandthPayout.innerText = `$${payouts['1000th']}`
+        // twelvehunnaFidyPayout.innerText = `$${payouts['1250th']}`
         // Apply Payout info to the DOM
         hunterEntries.innerText = `${hEntries}`
         payoutModel.innerText = `${payouts['payoutModel']}`
